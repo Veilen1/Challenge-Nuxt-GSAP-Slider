@@ -19,15 +19,5 @@ export default {
 </script>
 
 <style scoped>
-header {
-  background-color: #f8f9fa;
-  padding: 20px;
-  text-align: center;
-}
 
-footer {
-  background-color: #f8f9fa;
-  padding: 10px;
-  text-align: center;
-}
 </style>

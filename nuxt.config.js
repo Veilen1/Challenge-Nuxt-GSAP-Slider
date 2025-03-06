@@ -1,29 +1,20 @@
 export default {
-  components: true,
   head: {
-    title: 'Nuxt GSAP Project',
+    title: 'Nuxt Slider App',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'A Nuxt project with GSAP animations and SCSS styling' }
-    ],
-    link: [
-      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css' }
+      { hid: 'description', name: 'description', content: 'A simple slider component using Nuxt and GSAP' }
     ]
   },
 
-  css: [
-    '@/assets/styles/main.scss'
-  ],
-
-  plugins: [
-    '@/plugins/gsap.js'
-  ],
+  css: [],
+  plugins: [],
+  modules: [],
 
   build: {
-    extend(config, ctx) {
-    }
+    extend(config, ctx) {}
   },
 
-  compatibilityDate: '2025-02-26'
+  compatibilityDate: '2025-03-05'
 };
