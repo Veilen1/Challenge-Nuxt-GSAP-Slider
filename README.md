@@ -1,62 +1,42 @@
-# Nuxt GSAP Project
+# 🌟 Nuxt GSAP Project
 
-This project is a Nuxt.js application that integrates GSAP for animations and uses SCSS for styling. It features a slider component that showcases images or videos with navigation controls.
+Este proyecto es un ejemplo de un componente de slider implementado con Nuxt.js y GSAP. El slider incluye características como autoplay configurable y soporte para imágenes y videos.
 
-## Project Structure
+## ✨ Características
 
-```
-nuxt-gsap-project
-├── assets
-│   └── styles
-│       └── main.scss       # Main SCSS styles for the project
-├── components
-│   └── Slider.vue          # Slider component with navigation and validation
-├── layouts
-│   └── default.vue         # Default layout for the application
-├── pages
-│   └── index.vue           # Main page that uses the Slider component
-├── plugins
-│   └── gsap.js             # GSAP initialization and configuration
-├── static                  # Directory for static assets
-├── store                   # Directory for Vuex store files
-├── nuxt.config.js          # Nuxt configuration file
-└── README.md               # Project documentation
-```
+- 🚀 **Autoplay**: El slider puede configurarse para cambiar automáticamente entre diapositivas.
+- ⏱️ **Autoplay Delay**: El intervalo de tiempo entre cambios de diapositiva es configurable.
+- 🖼️ **Soporte para Imágenes y Videos**: El slider puede mostrar tanto imágenes como videos.
+- 🎨 **Transiciones Suaves**: Las transiciones entre diapositivas están animadas usando GSAP.
+- 🖱️ **Interacción del Usuario**: El autoplay se detiene cuando el usuario interactúa con el slider.
 
-## Installation
+## 📦 Instalación
 
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
-
-2. Navigate to the project directory:
-   ```
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tu-usuario/nuxt-gsap-project.git
    cd nuxt-gsap-project
-   ```
 
-3. Install dependencies:
-   ```
+2. Instala las dependencias:
    npm install
-   ```
 
-## Usage
+## 🚀 Uso
+Para iniciar el proyecto en modo desarrollador
+   "npm run dev" o "nuxt dev"
 
-To run the project in development mode, use:
-```
-npm run dev
-```
+Para construir el proyecto para produccion
+   "npm run build" o "nuxt build"
 
-Open your browser and navigate to `http://localhost:3000` to see the application in action.
+Para iniciar el servidor en modo de producción:
+   "npm run start" o "nuxi start"
 
-## Slider Component
+## ⚙️ Configuración
+   ### El componente Slider.vue acepta las siguientes props:
+   autoplay (Boolean): Habilita o deshabilita el autoplay. Por defecto es false.
+   ### autoplayDelay (Number): Configura el intervalo de tiempo en milisegundos entre cambios de diapositiva. Por defecto es 3000 (3 segundos).
 
-The `Slider` component accepts an array of slide data and includes navigation methods to cycle through the slides. It validates that there are at least 3 slides and initializes GSAP animations on mount.
+## 🤝 Contribuciones
+Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request para discutir cualquier cambio que te gustaría hacer.
 
-## Styling
-
-The project uses SCSS for styling. You can find the main styles in `assets/styles/main.scss`. Feel free to customize the styles as needed.
-
-## Contributing
-
-Feel free to submit issues or pull requests for improvements or bug fixes.
+## 📄 Licencia
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.

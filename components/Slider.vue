@@ -1,7 +1,7 @@
 <template>
   <div class="slider" @click="handleSliderClick">
     <div class="slider-title" ref="sliderTitle">
-      <h1 v-if="activeSlide">{{ activeSlide.name }}</h1>
+      <h1 v-if="activeSlide">{{ activeSlide.title }}</h1>
     </div>
     <div class="slider-counter">
       <p><span>{{ activeSlideIndex }}</span> / {{ totalSlides }}</p>
@@ -20,7 +20,8 @@
         ref="el => slides.value[index] = el"
       >
         <div class="slide-img">
-          <img :src="content.img" :alt="content.name" />
+          <img v-if="content.media.type === 'image'" :src="content.media.src" :alt="content.title" />
+          <video v-else :src="content.media.src" :width="content.media.w" :height="content.media.h" controls></video>
         </div>
       </div>
     </div>
@@ -63,13 +64,69 @@ export default {
     let autoplayInterval = null;
 
     const sliderContent = [
-      { name: "Serene Space", img: img1 },
-      { name: "Gentle Horizon", img: img2 },
-      { name: "Quiet Flow", img: img3 },
-      { name: "Ethereal Light", img: img4 },
-      { name: "Calm Drift", img: img5 },
-      { name: "Subtle Balance", img: img6 },
-      { name: "Soft Whisper", img: img7 },
+      {
+        title: "Serene Space",
+        media: {
+          type: "image",
+          src: img1,
+          w: "1080",
+          h: "1920",
+        },
+      },
+      {
+        title: "Gentle Horizon",
+        media: {
+          type: "image",
+          src: img2,
+          w: "1080",
+          h: "1920",
+        },
+      },
+      {
+        title: "Quiet Flow",
+        media: {
+          type: "image",
+          src: img3,
+          w: "1080",
+          h: "1920",
+        },
+      },
+      {
+        title: "Ethereal Light",
+        media: {
+          type: "image",
+          src: img4,
+          w: "1080",
+          h: "1920",
+        },
+      },
+      {
+        title: "Calm Drift",
+        media: {
+          type: "image",
+          src: img5,
+          w: "1080",
+          h: "1920",
+        },
+      },
+      {
+        title: "Subtle Balance",
+        media: {
+          type: "image",
+          src: img6,
+          w: "1080",
+          h: "1920",
+        },
+      },
+      {
+        title: "Soft Whisper",
+        media: {
+          type: "image",
+          src: img7,
+          w: "1080",
+          h: "1920",
+        },
+      },
     ];
 
     const getSlideIndex = (increment) => {
@@ -85,8 +142,8 @@ export default {
 
     const updatePreviewImage = (content) => {
       const newImage = document.createElement("img");
-      newImage.src = content.img;
-      newImage.alt = content.name;
+      newImage.src = content.media.src;
+      newImage.alt = content.title;
       sliderPreview.value.appendChild(newImage);
 
       gsap.fromTo(
