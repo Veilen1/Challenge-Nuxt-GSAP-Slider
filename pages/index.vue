@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <Slider />
-  </div>
+  <Slider :autoplay="true" :autoplayDelay="5000" />
 </template>
 
 <script>
@@ -11,9 +9,5 @@ export default {
   components: {
     Slider,
   },
-}
+};
 </script>
-
-<style scoped>
-/* Add any styles specific to the index page here */
-</style>

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, ref, nextTick, watch } from 'vue';
 import { gsap } from 'gsap';
 import CustomEase from 'gsap/CustomEase';
 
@@ -43,13 +43,24 @@ import img7 from '@/static/images/img7.jpg';
 
 export default {
   name: 'Slider',
-  setup() {
+  props: {
+    autoplay: {
+      type: Boolean,
+      default: false,
+    },
+    autoplayDelay: {
+      type: Number,
+      default: 3000, // 3 segundos
+    },
+  },
+  setup(props) {
     const sliderTitle = ref(null);
     const sliderPreview = ref(null);
     const slides = ref([]);
     const totalSlides = 7;
     const activeSlideIndex = ref(1);
     const isAnimating = ref(false);
+    let autoplayInterval = null;
 
     const sliderContent = [
       { name: "Serene Space", img: img1 },
@@ -141,12 +152,29 @@ export default {
       const clickedSlide = e.target.closest(".slide-container");
       if (clickedSlide && !isAnimating.value) {
         transitionSlides(clickedSlide.classList.contains("next") ? "next" : "prev");
+        stopAutoplay();
       }
     };
 
     const handleNumberClick = (index) => {
       if (index !== activeSlideIndex.value && !isAnimating.value) {
         transitionSlides(index > activeSlideIndex.value ? "next" : "prev");
+        stopAutoplay();
+      }
+    };
+
+    const startAutoplay = () => {
+      if (props.autoplay) {
+        autoplayInterval = setInterval(() => {
+          transitionSlides("next");
+        }, props.autoplayDelay);
+      }
+    };
+
+    const stopAutoplay = () => {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
       }
     };
 
@@ -162,6 +190,16 @@ export default {
       slides.value = Array.from(document.querySelectorAll('.slide-container'));
 
       updatePreviewImage(sliderContent[activeSlideIndex.value - 1]);
+
+      startAutoplay();
+    });
+
+    watch(() => props.autoplay, (newVal) => {
+      if (newVal) {
+        startAutoplay();
+      } else {
+        stopAutoplay();
+      }
     });
 
     return {
