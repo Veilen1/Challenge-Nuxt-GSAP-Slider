@@ -14,7 +14,7 @@ Este proyecto es un ejemplo de un componente de slider implementado con Nuxt.js 
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/nuxt-gsap-project.git
+   git clone https://github.com/Veilen1/Challenge-Nuxt-GSAP-Slider.git
    cd nuxt-gsap-project
 
 2. Instala las dependencias:
@@ -22,7 +22,9 @@ Este proyecto es un ejemplo de un componente de slider implementado con Nuxt.js 
 
 ## 🚀 Uso
 Para iniciar el proyecto en modo desarrollador
-   "npm run dev" o "nuxt dev"
+   "npm run dev"
+   o 
+   "nuxt dev"
 
 Para construir el proyecto para produccion
    "npm run build" o "nuxt build"
