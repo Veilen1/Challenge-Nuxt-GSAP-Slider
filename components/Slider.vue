@@ -61,17 +61,6 @@ export default {
       { name: "Soft Whisper", img: img7 },
     ];
 
-    const clipPath = {
-      closed: "polygon(25% 30%, 75% 30%, 75% 70%, 25% 70%)",
-      open: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-    };
-
-    const slidePositions = {
-      prev: { left: "15%", rotation: -90 },
-      active: { left: "50%", rotation: 0 },
-      next: { left: "85%", rotation: 90 },
-    };
-
     const getSlideIndex = (increment) => {
       return ((activeSlideIndex.value + increment - 1 + totalSlides) % totalSlides) + 1;
     };
@@ -122,30 +111,20 @@ export default {
       const incomingSlide = slides.value.find(slide => slide.classList.contains(incomingPos));
 
       animateSlide(incomingSlide, {
-        ...slidePositions.active,
-        clipPath: clipPath.open,
+        left: "50%",
+        rotation: 0,
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        scale: 1,
       });
       animateSlide(activeSlide, {
-        ...slidePositions[outgoingPos],
-        clipPath: clipPath.closed,
+        left: direction === "next" ? "15%" : "85%",
+        rotation: -90,
+        clipPath: "polygon(25% 30%, 75% 30%, 75% 70%, 25% 70%)",
+        scale: 0.5,
       });
       gsap.to(outgoingSlide, { scale: 0.5, opacity: 0.5, duration: 2, ease: "hop" });
 
-      const newSlideIndex = getSlideIndex(direction === "next" ? 2 : -2);
-      const newSlide = createSlide(sliderContent[newSlideIndex - 1], incomingPos);
-      slides.value.push(newSlide);
-      gsap.set(newSlide, {
-        ...slidePositions[incomingPos],
-        xPercent: -50,
-        yPercent: -50,
-        scale: 0.5,
-        opacity: 0.5,
-        clipPath: clipPath.closed,
-      });
-      gsap.to(newSlide, { scale: 1, opacity: 1, duration: 2, ease: "hop" });
-
       const nextActiveIndex = getSlideIndex(direction === "next" ? 1 : -1);
-      createAndAnimateTitle(sliderContent[nextActiveIndex - 1], direction);
       updatePreviewImage(sliderContent[nextActiveIndex - 1]);
 
       setTimeout(() => updateCounterAndHighlight(nextActiveIndex), 1000);
@@ -171,53 +150,7 @@ export default {
       }
     };
 
-    const createSlide = (content, className) => {
-      const slide = document.createElement("div");
-      slide.className = `slide-container ${className}`;
-      slide.innerHTML = `<div class="slide-img"><img src="${content.img}" alt="${content.name}"></div>`;
-      return slide;
-    };
-
-    const createAndAnimateTitle = (content, direction) => {
-      const newTitle = document.createElement("h1");
-      newTitle.innerText = content.name;
-      sliderTitle.value.appendChild(newTitle);
-      splitTextIntoSpans(newTitle);
-
-      const yOffset = direction === "next" ? 60 : -60;
-      gsap.set(newTitle.querySelectorAll("span"), { y: yOffset });
-      gsap.to(newTitle.querySelectorAll("span"), {
-        y: 0,
-        duration: 1.25,
-        stagger: 0.02,
-        ease: "hop",
-        delay: 0.25,
-      });
-
-      const currentTitle = sliderTitle.value.querySelector("h1:not(:last-child)");
-      if (currentTitle) {
-        gsap.to(currentTitle.querySelectorAll("span"), {
-          y: -yOffset,
-          duration: 1.25,
-          stagger: 0.02,
-          ease: "hop",
-          delay: 0.25,
-          onComplete: () => currentTitle.remove(),
-        });
-      }
-    };
-
-    const splitTextIntoSpans = (element) => {
-      element.innerHTML = element.innerText
-        .split("")
-        .map((char) => `<span>${char === " " ? "&nbsp;&nbsp;" : char}</span>`)
-        .join("");
-    };
-
     onMounted(async () => {
-      console.log('Component mounted');
-      console.log('Slider content:', sliderContent);
-      console.log('Slider container:', document.querySelector('.slider'));
       gsap.registerPlugin(CustomEase);
       CustomEase.create(
         "hop",
@@ -228,46 +161,13 @@ export default {
 
       slides.value = Array.from(document.querySelectorAll('.slide-container'));
 
-      Object.entries(slidePositions).forEach(([key, value]) => {
-        gsap.set(`.slide-container.${key}`, {
-          ...value,
-          xPercent: -50,
-          yPercent: -50,
-          clipPath: key === "active" ? clipPath.open : clipPath.closed,
-        });
-        if (key !== "active") {
-          gsap.set(`.slide-container.${key} .slide-img`, {
-            rotation: -value.rotation,
-          });
-        }
-      });
-
-      if (sliderTitle.value) {
-        const initialTitle = sliderTitle.value.querySelector("h1");
-        splitTextIntoSpans(initialTitle);
-        gsap.fromTo(
-          initialTitle.querySelectorAll("span"),
-          { y: 60 },
-          { y: 0, duration: 1, stagger: 0.02, ease: "hop" }
-        );
-      }
-
-      updateCounterAndHighlight(activeSlideIndex.value);
-
-      slides.value.forEach((item, index) => {
-        item.addEventListener("click", () => {
-          if (index + 1 !== activeSlideIndex.value && !isAnimating.value) {
-            transitionSlides(index + 1 > activeSlideIndex.value ? "next" : "prev");
-          }
-        });
-      });
+      updatePreviewImage(sliderContent[activeSlideIndex.value - 1]);
     });
 
     return {
       sliderTitle,
       sliderPreview,
       slides,
-      totalSlides,
       activeSlideIndex,
       sliderContent,
       handleSliderClick,
@@ -288,6 +188,7 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: #000;
 }
 
 html,
@@ -295,8 +196,9 @@ body {
   width: 100%;
   height: 100%;
   font-family: "PP Neue Montreal", sans-serif;
-  background-color: #000000;
   color: #fff;
+  margin: 0;
+  padding: 0;
 }
 
 p,
@@ -312,22 +214,6 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-nav {
-  position: absolute;
-  width: 100%;
-  padding: 2em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
-}
-
-nav a#logo {
-  font-family: "Timmons NY 2.005";
-  font-size: 40px;
-  color: #303030;
 }
 
 .slider {
@@ -348,21 +234,30 @@ nav a#logo {
   cursor: pointer;
   will-change: transform, opacity, clip-path;
   z-index: 2;
-  opacity: 0; /* Opacidad para los sliders que no son previos, activos o siguientes */
+  opacity: 0 !important; /* Opacidad para los sliders que no son previos, activos o siguientes */
 }
 
-.slide-container.prev{
-  opacity: 1; /* Opacidad para los sliders previos y siguientes */
+.slide-container.prev,
+.slide-container.next {
+  opacity: 0.75 !important; /* Opacidad para los sliders previos y siguientes */
+  transform: translate(-50%, -50%) translate(-0.195px, -0.094px) rotate(-90deg);
+  clip-path: polygon(25% 30%, 75% 30%, 75% 70%, 25% 70%);
+  scale: 0.5;
+}
+
+.slide-container.prev {
   left: 15%;
 }
+
 .slide-container.next {
-  opacity: 1; /* Opacidad para los sliders previos y siguientes */
   left: 85%;
 }
 
 .slide-container.active {
-  opacity: 1; /* Opacidad completa para el slider activo */
-  z-index: 99;
+  opacity: 1 !important; /* Opacidad completa para el slider activo */
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  scale: 1;
 }
 
 .slide-img {
@@ -370,8 +265,8 @@ nav a#logo {
   width: 100%;
   height: 100%;
   will-change: transform;
-
 }
+
 .slide-container img {
   width: 100%;
   height: 100%;
@@ -398,6 +293,7 @@ nav a#logo {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   z-index: 10;
   opacity: 1;
+  background-color: transparent;
 }
 
 .slider-title h1 {
@@ -408,6 +304,7 @@ nav a#logo {
   color: #fff;
   font-size: 50px;
   font-weight: 500;
+  background-color: transparent;
 }
 
 .slider-title h1 span {
@@ -416,6 +313,7 @@ nav a#logo {
   transform: translateY(50px);
   will-change: transform;
 }
+
 
 .slider-counter {
   position: absolute;
